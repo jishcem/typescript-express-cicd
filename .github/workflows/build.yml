@@ -22,13 +22,17 @@ jobs:
           role-to-assume: arn:aws:iam::464615698121:role/github-actions-role
           role-session-name: samplerolesession
           aws-region: ${{ env.AWS_REGION }}
+      - name: Extract branch name
+        shell: bash
+        run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+        id: extract_branch
       - name: Npm install
         run: |
           npm install
       - name: Npm build
         run: |
           npm run build
-      # Upload a file to AWS s3
-      - name:  Copy package.json to s3
+      # Copy build directory to S3
+      - name:  Copy build to S3
         run: |
-          aws s3 cp ./package.json s3://${{ env.BUCKET_NAME }}/
+          aws s3 cp ./dist s3://${{ env.BUCKET_NAME }}/${extract_branch}
