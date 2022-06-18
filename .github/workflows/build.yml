@@ -26,6 +26,10 @@ jobs:
         shell: bash
         run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
         id: extract_branch
+      - name: Extract commit hash
+        shell: bash
+        run: echo "##[set-output name=commit_hash;]$(echo git rev-parse --short "$GITHUB_SHA")"
+        id: extract_hash
       - name: Npm install
         run: |
           npm install
@@ -35,4 +39,4 @@ jobs:
       # Copy build directory to S3
       - name:  Copy build to S3
         run: |
-          aws s3 cp ./dist s3://${{ env.BUCKET_NAME }}/${{ steps.extract_branch.outputs.branch }}
+          aws s3 cp ./dist s3://${{ env.BUCKET_NAME }}/${{ steps.extract_branch.outputs.branch }}/${{ steps.extract_hash.outputs.commit_hash }}/
