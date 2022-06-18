@@ -22,7 +22,7 @@ jobs:
           role-to-assume: arn:aws:iam::464615698121:role/github-actions-role
           role-session-name: samplerolesession
           aws-region: ${{ env.AWS_REGION }}
-      - name: Install node
+      - name: install node
         - uses: actions/setup-node@v3
         with:
           node-version: 16
