@@ -4,6 +4,7 @@ const app: Express = express();
 const port = process.env.PORT ?? 8000;
 
 app.get("/", (req: Request, res: Response) => {
+    const someVar = "hi there";
     res.send("Express + Typescript Server");
 });
 
